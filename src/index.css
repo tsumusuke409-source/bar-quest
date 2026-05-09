@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap');
+
+:root {
+  --amber: #d4a017;
+  --navy: #1b1f3a;
+  --night: #0d1128;
+  --cream: #f4e4c1;
+  --gold: #f5c842;
+  --warm-orange: #e8851a;
+  --dark-brown: #3d1f0a;
+  --success: #2ecc71;
+  --error: #e74c3c;
+  --panel: #1e2347;
+  --border: #3a4075;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #0a0a14;
+  overflow: hidden;
+  font-family: 'DotGothic16', sans-serif;
+}
+
+#root {
+  width: 100vw; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.game-wrap {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+  overflow: hidden;
+  background: var(--night);
+}
+
+/* ── Pixel art ─────────────────────────────────────────────────────────── */
+.pixel-art { image-rendering: pixelated; image-rendering: crisp-edges; }
+
+/* ── Typography ─────────────────────────────────────────────────────────── */
+.font-pixel { font-family: 'Press Start 2P', monospace; }
+.font-gothic { font-family: 'DotGothic16', sans-serif; }
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.btn-pixel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: var(--cream);
+  background: #1a2d6b;
+  border: none;
+  padding: 14px 28px;
+  cursor: pointer;
+  outline: none;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 0 0 #0d1535, inset 0 1px 0 0 rgba(255,255,255,0.15);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.1s;
+  text-transform: uppercase;
+  user-select: none;
+}
+.btn-pixel:hover:not(:disabled) { background: #223a8a; color: var(--gold); }
+.btn-pixel:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 0 #0d1535; }
+.btn-pixel:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-pixel.gold { background: #6b4a00; box-shadow: 0 4px 0 0 #3d2a00, inset 0 1px 0 0 rgba(255,255,255,0.15); }
+.btn-pixel.gold:hover:not(:disabled) { background: #8a6200; color: var(--gold); }
+.btn-pixel.danger { background: #6b1a1a; box-shadow: 0 4px 0 0 #3d0000, inset 0 1px 0 0 rgba(255,255,255,0.15); }
+.btn-pixel.danger:hover:not(:disabled) { background: #8a2222; }
+.btn-pixel.ghost { background: transparent; border: 2px solid #445; box-shadow: none; }
+.btn-pixel.ghost:hover:not(:disabled) { background: rgba(26,45,107,0.3); border-color: var(--gold); }
+.btn-pixel.small { font-size: 9px; padding: 10px 18px; }
+.btn-pixel.large { font-size: 14px; padding: 18px 36px; }
+
+/* ── Dialog Box ─────────────────────────────────────────────────────────── */
+.dialog-box {
+  background: rgba(10, 14, 35, 0.97);
+  border: 3px solid var(--gold);
+  padding: 18px 20px;
+  color: var(--cream);
+  line-height: 1.9;
+  font-size: 15px;
+  font-family: 'DotGothic16', sans-serif;
+  box-shadow: 0 0 0 1px #1a3060, inset 0 0 20px rgba(245,200,66,0.04);
+}
+.dialog-box .speaker-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  display: block;
+}
+.dialog-highlight { color: var(--gold); font-weight: bold; }
+.lecture-text { font-family: 'DotGothic16', sans-serif; font-size: 15px; line-height: 1.9; color: var(--cream); }
+
+/* ── HUD ───────────────────────────────────────────────────────────────── */
+.hud { position: absolute; top: 10px; right: 12px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; z-index: 10; }
+.hud-name { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--gold); }
+.hud-rank { font-family: 'DotGothic16', sans-serif; font-size: 12px; color: var(--cream); }
+.hud-gold { font-family: 'DotGothic16', sans-serif; font-size: 12px; color: #f5c842; }
+
+/* ── Progress Bar ───────────────────────────────────────────────────────── */
+.prog-bar-wrap { width: 100%; height: 12px; background: #111; border: 2px solid #334; overflow: hidden; }
+.prog-bar-fill { height: 100%; transition: width 0.4s; }
+.prog-bar-fill.xp { background: var(--gold); }
+.prog-bar-fill.health { background: #44cc44; }
+.prog-bar-fill.score { background: #44aaff; }
+.prog-bar-fill.timer { background: #cc4444; }
+
+/* ── Stage Map ──────────────────────────────────────────────────────────── */
+.stage-node {
+  position: absolute;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  background: #1a2d6b;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--cream);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  user-select: none;
+}
+.stage-node:hover:not(.locked) { transform: translate(-50%, -50%) scale(1.12); }
+.stage-node.completed { background: #1a4a1a; border-color: #44cc44; box-shadow: 0 0 14px rgba(68,204,68,0.55); }
+.stage-node.locked { background: #111; border-color: #333; color: #444; cursor: not-allowed; }
+.stage-node.current { animation: pulse-node 1.6s ease-in-out infinite; }
+.stage-node.summary { border-radius: 8px; width: 60px; height: 60px; }
+
+/* ── Quiz ───────────────────────────────────────────────────────────────── */
+.quiz-option {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 14px;
+  background: #111a3a;
+  border: 2px solid #334;
+  color: var(--cream);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+  text-align: left;
+  width: 100%;
+  line-height: 1.5;
+}
+.quiz-option:hover:not(:disabled) { background: #1a2d6b; border-color: var(--gold); }
+.quiz-option.correct { background: #0a3a0a !important; border-color: #44cc44 !important; color: #aaffaa; }
+.quiz-option.wrong { background: #3a0a0a !important; border-color: #cc4444 !important; color: #ffaaaa; animation: shake 0.35s; }
+
+/* ── Cocktail Practice ──────────────────────────────────────────────────── */
+.cocktail-step {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: #111a3a; border: 2px solid #334;
+  font-family: 'DotGothic16', sans-serif; font-size: 14px; color: var(--cream);
+  cursor: pointer; transition: background 0.1s, border-color 0.1s;
+}
+.cocktail-step:hover:not(.done):not(.disabled) { background: #1a2d6b; border-color: var(--gold); }
+.cocktail-step.done { background: #0a3a0a; border-color: #44cc44; color: #aaffaa; cursor: default; }
+.cocktail-step.error { animation: shake 0.35s; border-color: #cc4444 !important; }
+
+/* ── Service ────────────────────────────────────────────────────────────── */
+.service-choice {
+  background: #111a3a; border: 2px solid #334;
+  padding: 12px 16px; cursor: pointer;
+  font-family: 'DotGothic16', sans-serif; font-size: 13px; color: var(--cream);
+  transition: background 0.1s, border-color 0.1s;
+  text-align: left; width: 100%; line-height: 1.5;
+}
+.service-choice:hover:not(:disabled) { background: #1a2d6b; border-color: var(--gold); }
+.service-choice.positive { border-color: #44cc44; background: #0a3a0a; color: #aaffaa; }
+.service-choice.negative { border-color: #cc4444; background: #3a0a0a; color: #ffaaaa; }
+
+/* ── Encyclopedia ───────────────────────────────────────────────────────── */
+.enc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; padding: 12px; }
+.enc-item { background: #111a3a; border: 2px solid #334; padding: 8px; text-align: center; cursor: pointer; transition: border-color 0.1s; }
+.enc-item:hover:not(.locked) { border-color: var(--gold); }
+.enc-item.locked { filter: brightness(0.25) saturate(0); cursor: not-allowed; }
+.enc-item-name { font-family: 'DotGothic16', sans-serif; font-size: 11px; color: var(--cream); margin-top: 6px; }
+
+/* ── Screens ────────────────────────────────────────────────────────────── */
+.screen { position: absolute; inset: 0; animation: fadeIn 0.3s ease; }
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0d1128; }
+::-webkit-scrollbar-thumb { background: #334; border-radius: 4px; }
+
+/* ── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes idle-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.idle-bob { animation: idle-bob 2s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity: 0.9; } 50% { opacity: 0.2; } }
+@keyframes pulse-node {
+  0%, 100% { box-shadow: 0 0 10px rgba(245,200,66,0.4); transform: translate(-50%,-50%) scale(1); }
+  50% { box-shadow: 0 0 24px rgba(245,200,66,0.9); transform: translate(-50%,-50%) scale(1.1); }
+}
+@keyframes gold-shimmer {
+  0%, 100% { color: #f5c842; text-shadow: 0 0 8px rgba(245,200,66,0.4); }
+  50% { color: #ffe080; text-shadow: 0 0 20px rgba(255,224,128,0.8); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+@keyframes cursor-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes float-up { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-30px); opacity: 0; } }
