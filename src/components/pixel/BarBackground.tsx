@@ -61,6 +61,7 @@ export function BarBackground({ variant = 'night' }: { variant?: 'night' | 'even
   return (
     <svg
       viewBox="0 0 320 180"
+      preserveAspectRatio="xMidYMax meet"
       className="pixel-art"
       style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, display: 'block' }}
       aria-hidden="true"

@@ -12,6 +12,7 @@ export function TitleScreen() {
   const { hasSave, deleteSave } = useSaveData()
   const [showConfirm, setShowConfirm] = useState(false)
   const [musicOn, setMusicOn] = useState(audioEngine.enabled)
+  const isMobile = window.innerWidth < window.innerHeight
 
   const handleNewGame = () => {
     if (hasSave) { setShowConfirm(true); return }
@@ -45,10 +46,12 @@ export function TitleScreen() {
 
       {/* Master sprite */}
       <div style={{
-        position: 'absolute', bottom: '28%', left: '8%',
+        position: 'absolute',
+        bottom: isMobile ? '46%' : '28%',
+        left: isMobile ? '4%' : '8%',
         animation: 'idle-bob 2.2s ease-in-out infinite',
       }}>
-        <MasterSprite expression="happy" scale={5} />
+        <MasterSprite expression="happy" scale={isMobile ? 4 : 5} />
       </div>
 
       {/* Title block */}

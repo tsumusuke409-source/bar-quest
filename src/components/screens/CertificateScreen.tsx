@@ -43,9 +43,10 @@ export function CertificateScreen() {
         background: 'linear-gradient(160deg, #0e1535 0%, #1a2347 50%, #0e1535 100%)',
         border: '4px solid var(--gold)',
         boxShadow: '0 0 40px rgba(245,200,66,0.3), inset 0 0 60px rgba(245,200,66,0.04)',
-        padding: '32px 36px',
-        maxWidth: 520, width: '90%',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20,
+        padding: 'clamp(16px, 4vw, 32px) clamp(18px, 5vw, 36px)',
+        maxWidth: 520, width: '92%',
+        maxHeight: '92svh', overflowY: 'auto',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
         zIndex: 1,
       }}>
         {/* Corner decorations */}

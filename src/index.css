@@ -24,7 +24,7 @@ html, body {
 }
 
 #root {
-  width: 100vw; height: 100vh;
+  width: 100vw; height: 100vh; height: 100svh;
   display: flex; align-items: center; justify-content: center;
 }
 
@@ -34,6 +34,33 @@ html, body {
   height: min(100vh, calc(100vw * 9 / 16));
   overflow: hidden;
   background: var(--night);
+}
+
+/* Portrait mobile: fill full viewport */
+@media (max-aspect-ratio: 1/1) {
+  .game-wrap {
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+  }
+}
+
+/* ── Touch: prevent 300ms delay ────────────────────────────────────────── */
+button, a, [role="button"] { touch-action: manipulation; }
+
+/* ── Mobile overrides (narrow portrait) ────────────────────────────────── */
+@media (max-width: 500px) {
+  .btn-pixel { font-size: 9px; padding: 11px 16px; }
+  .btn-pixel.large { font-size: 10px; padding: 13px 16px; }
+  .btn-pixel.small { font-size: 7px; padding: 8px 12px; }
+  .dialog-box { font-size: 13px; padding: 14px 16px; line-height: 1.8; }
+  .lecture-text { font-size: 13px; }
+  .quiz-option { font-size: 13px; padding: 10px 14px; }
+  .service-choice { font-size: 12px; padding: 10px 14px; }
+  .cocktail-step { font-size: 13px; padding: 8px 12px; }
+  .stage-node { width: 42px; height: 42px; font-size: 6px; }
+  .stage-node.summary { width: 48px; height: 48px; }
+  .enc-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; padding: 8px; }
 }
 
 /* ── Pixel art ─────────────────────────────────────────────────────────── */

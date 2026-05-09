@@ -12,6 +12,7 @@ export function MainMenuScreen() {
   const player = useGameStore(s => s.player)
   const completedStages = useGameStore(s => s.completedStages)
   const [musicOn, setMusicOn] = useState(audioEngine.enabled)
+  const isMobile = window.innerWidth < window.innerHeight
 
   const toggleMusic = () => {
     const v = !musicOn
@@ -63,14 +64,17 @@ export function MainMenuScreen() {
       </div>
 
       {/* Master speech bubble */}
-      <div style={{
+      <div style={isMobile ? {
+        position: 'absolute', top: '18%', left: '4%',
+        display: 'flex', alignItems: 'flex-end', gap: 10, maxWidth: '88%',
+      } : {
         position: 'absolute', bottom: '26%', left: '6%',
         display: 'flex', alignItems: 'flex-end', gap: 12,
       }}>
-        <div style={{ animation: 'idle-bob 2.4s ease-in-out infinite' }}>
-          <MasterSprite expression="happy" scale={4} />
+        <div style={{ animation: 'idle-bob 2.4s ease-in-out infinite', flexShrink: 0 }}>
+          <MasterSprite expression="happy" scale={isMobile ? 3 : 4} />
         </div>
-        <div className="dialog-box" style={{ maxWidth: 220, fontSize: 13 }}>
+        <div className="dialog-box" style={{ maxWidth: isMobile ? 240 : 220, fontSize: 13 }}>
           <span className="speaker-name">マスター</span>
           {completedStages.length === 0
             ? 'まずはステージマップから基礎を学ぼう。一歩一歩確実に覚えていくんだ。'
@@ -79,39 +83,49 @@ export function MainMenuScreen() {
       </div>
 
       {/* Main menu buttons */}
-      <div style={{
+      <div style={isMobile ? {
+        position: 'absolute', bottom: '5%', left: '4%', right: '4%',
+        display: 'flex', flexDirection: 'column', gap: 10,
+      } : {
         position: 'absolute', top: '50%', right: '6%',
         transform: 'translateY(-50%)',
         display: 'flex', flexDirection: 'column', gap: 12,
         width: 'min(220px, 40%)',
       }}>
-        <button className="btn-pixel large gold" onClick={() => navigate('stageMap')}>
+        <button className="btn-pixel large gold" onClick={() => navigate('stageMap')}
+          style={{ width: '100%' }}>
           🗺 STAGE MAP
         </button>
-        <button className="btn-pixel" onClick={() => navigate('quiz')}>
+        <button className="btn-pixel" onClick={() => navigate('quiz')}
+          style={{ width: '100%' }}>
           📝 QUIZ
         </button>
-        <button className="btn-pixel" onClick={() => navigate('service')}>
+        <button className="btn-pixel" onClick={() => navigate('service')}
+          style={{ width: '100%' }}>
           🍸 SERVICE
         </button>
-        <button className="btn-pixel" onClick={() => navigate('encyclopedia')}>
+        <button className="btn-pixel" onClick={() => navigate('encyclopedia')}
+          style={{ width: '100%' }}>
           📖 ENCYCLOPEDIA
         </button>
         {completedStages.length >= 29 && (
-          <button className="btn-pixel gold" onClick={() => navigate('certificate')}>
+          <button className="btn-pixel gold" onClick={() => navigate('certificate')}
+            style={{ width: '100%' }}>
             🏆 CERTIFICATE
           </button>
         )}
       </div>
 
-      {/* XP display */}
-      <div style={{
-        position: 'absolute', bottom: '6%', right: '6%',
-        fontFamily: "'Press Start 2P', monospace", fontSize: 9,
-        color: '#8090b0',
-      }}>
-        XP {player.xp}
-      </div>
+      {/* XP display - only landscape */}
+      {!isMobile && (
+        <div style={{
+          position: 'absolute', bottom: '6%', right: '6%',
+          fontFamily: "'Press Start 2P', monospace", fontSize: 9,
+          color: '#8090b0',
+        }}>
+          XP {player.xp}
+        </div>
+      )}
     </div>
   )
 }
