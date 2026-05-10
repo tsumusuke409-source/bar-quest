@@ -93,6 +93,26 @@ export function StageMapScreen() {
         position: 'absolute', top: 90, bottom: 50, left: 0, right: 0,
         overflow: 'hidden',
       }}>
+        {/* Decorative background stars */}
+        {[...Array(24)].map((_, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            left: `${(i * 41 + 7) % 97}%`,
+            top: `${(i * 29 + 11) % 90}%`,
+            width: i % 4 === 0 ? 3 : i % 3 === 0 ? 2 : 1,
+            height: i % 4 === 0 ? 3 : i % 3 === 0 ? 2 : 1,
+            background: i % 5 === 0 ? '#f5c842' : i % 3 === 0 ? '#aaccff' : '#ffe0a0',
+            opacity: 0.3 + (i % 5) * 0.1,
+            animation: `twinkle ${1.5 + (i % 7) * 0.3}s ${i * 0.13}s ease-in-out infinite`,
+            pointerEvents: 'none',
+          }} />
+        ))}
+        {/* Subtle chapter background glow */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(ellipse at 50% 50%, rgba(245,200,66,0.04) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
         <svg
           viewBox="0 0 100 100"
           preserveAspectRatio="none"

@@ -64,6 +64,7 @@ export interface Stage {
   lectureKey: string    // key in dialogues data
   practiceType: PracticeType
   practiceRef: string   // quiz category OR cocktailId OR scenarioId
+  quizIds?: string[]    // specific quiz IDs; when set, overrides category filter
   xpReward: number
   goldReward: number
   unlocks: string[]     // cocktail / character IDs

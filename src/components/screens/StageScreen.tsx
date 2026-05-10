@@ -4,6 +4,7 @@ import { useTrack, audioEngine } from '../../hooks/useAudio'
 import { BarBackground } from '../pixel/BarBackground'
 import { MasterSprite } from '../pixel/MasterSprite'
 import { PlayerSprite } from '../pixel/PlayerSprite'
+import { ToolVisual } from '../pixel/ToolVisual'
 import { STAGES_FLAT } from '../../data/stages'
 import { DIALOGUES } from '../../data/dialogues'
 import { QUIZZES } from '../../data/quizzes'
@@ -67,9 +68,29 @@ function LecturePhase({
 
   return (
     <div style={{ position: 'absolute', inset: 0, display: 'flex',
-      flexDirection: 'column', justifyContent: 'flex-end', padding: '0 16px 16px' }}>
-      {/* Speaker sprite */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, marginBottom: 12 }}>
+      flexDirection: 'column', justifyContent: 'center', padding: '0 16px 8px' }}>
+
+      {/* Tool / item illustration */}
+      {slide.visual && (
+        <div style={{
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          marginBottom: 12,
+          animation: 'fadeIn 0.3s ease',
+        }}>
+          <div style={{
+            background: 'rgba(10,14,35,0.7)',
+            border: '2px solid var(--border)',
+            borderRadius: 4,
+            padding: 12,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <ToolVisual visualKey={slide.visual} size={72} />
+          </div>
+        </div>
+      )}
+
+      {/* Speaker sprite + dialog */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, marginBottom: 10 }}>
         <div style={{ flexShrink: 0 }}>
           {slide.speaker === 'master' ? (
             <MasterSprite expression={slide.expression ?? 'normal'} scale={4}
@@ -133,12 +154,15 @@ function LecturePhase({
 
 // ─── Quiz Practice ─────────────────────────────────────────────────────────────
 function QuizPractice({
-  category, onComplete,
+  category, quizIds, onComplete,
 }: {
   category: string
+  quizIds?: string[]
   onComplete: (score: number) => void
 }) {
-  const pool = category === 'mixed'
+  const pool = quizIds
+    ? shuffle(QUIZZES.filter(q => quizIds.includes(q.id))).slice(0, 5)
+    : category === 'mixed'
     ? shuffle(QUIZZES).slice(0, 5)
     : shuffle(QUIZZES.filter(q => q.category === category)).slice(0, 5)
 
@@ -664,6 +688,7 @@ export function StageScreen() {
             return (
               <QuizPractice
                 category={stage.practiceRef === 'final_trial' ? 'mixed' : stage.practiceRef}
+                quizIds={stage.quizIds}
                 onComplete={handlePracticeComplete}
               />
             )
