@@ -1,3 +1,5 @@
+import React from 'react'
+
 // Pixel-art SVG illustrations for bar tools and glasses.
 // Each component uses a 64×80 viewBox for consistent display.
 
@@ -392,7 +394,7 @@ function IrishCoffeeMugVisual() {
 }
 
 // Spirit bottle visual (generic bottle with color)
-function SpiritBottleVisual({ color, labelColor, label }: { color: string; labelColor: string; label: string }) {
+function SpiritBottleVisual({ color, labelColor }: { color: string; labelColor: string; label: string }) {
   return (
     <g>
       {/* Cap */}
@@ -427,7 +429,7 @@ const SPIRIT_COLORS: Record<string, { color: string; labelColor: string; label: 
   brandy:  { color: '#aa5010', labelColor: '#2a0a00', label: 'BRANDY' },
 }
 
-const VISUAL_MAP: Record<string, JSX.Element> = {
+const VISUAL_MAP: Record<string, React.ReactElement> = {
   shaker:        <ShakerVisual />,
   bar_spoon:     <BarSpoonVisual />,
   jigger:        <JiggerVisual />,
