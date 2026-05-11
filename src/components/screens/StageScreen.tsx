@@ -154,28 +154,58 @@ function LecturePhase({
 
 // ─── Quiz Practice ─────────────────────────────────────────────────────────────
 function QuizPractice({
-  category, quizIds, onComplete,
+  category, quizIds, quizCount, timeLimit, maxLives, onComplete,
 }: {
   category: string
   quizIds?: string[]
+  quizCount?: number
+  timeLimit?: number
+  maxLives?: number
   onComplete: (score: number) => void
 }) {
+  const count = quizCount ?? 5
   const pool = quizIds
-    ? shuffle(QUIZZES.filter(q => quizIds.includes(q.id))).slice(0, 5)
+    ? shuffle(QUIZZES.filter(q => quizIds.includes(q.id))).slice(0, count)
     : category === 'mixed'
-    ? shuffle(QUIZZES).slice(0, 5)
-    : shuffle(QUIZZES.filter(q => q.category === category)).slice(0, 5)
+    ? shuffle(QUIZZES).slice(0, count)
+    : shuffle(QUIZZES.filter(q => q.category === category)).slice(0, count)
 
   const [questions] = useState(pool)
   const [qIdx, setQIdx] = useState(0)
-  const [selected, setSelected] = useState<number | null>(null)
+  const [selected, setSelected] = useState<number | null>(null) // -1 = timed out
   const [correct, setCorrect] = useState(0)
+  const [livesLeft, setLivesLeft] = useState<number | null>(maxLives ?? null)
+  const [timeLeft, setTimeLeft] = useState<number | null>(timeLimit ?? null)
+  const [gameOver, setGameOver] = useState(false)
 
   const q = questions[qIdx]
+
+  // Timer countdown
+  useEffect(() => {
+    if (!timeLimit || selected !== null || gameOver || !q) return
+    if (timeLeft === 0) {
+      setSelected(-1)
+      audioEngine.sfx('wrong')
+      if (livesLeft !== null) {
+        const newLives = livesLeft - 1
+        setLivesLeft(newLives)
+        if (newLives <= 0) setGameOver(true)
+      }
+      return
+    }
+    const t = setTimeout(() => setTimeLeft(prev => (prev ?? 1) - 1), 1000)
+    return () => clearTimeout(t)
+  }, [timeLeft, selected, timeLimit, livesLeft, gameOver, q])
+
+  // Reset timer on new question
+  useEffect(() => {
+    setTimeLeft(timeLimit ?? null)
+  }, [qIdx, timeLimit])
+
   if (!q) return null
 
   const handleAnswer = (i: number) => {
-    if (selected !== null) return
+    if (selected !== null || gameOver) return
     setSelected(i)
     const isCorrect = i === q.correct
     if (isCorrect) {
@@ -183,17 +213,26 @@ function QuizPractice({
       audioEngine.sfx('correct')
     } else {
       audioEngine.sfx('wrong')
+      if (livesLeft !== null) {
+        const newLives = livesLeft - 1
+        setLivesLeft(newLives)
+        if (newLives <= 0) setGameOver(true)
+      }
     }
   }
 
   const next = () => {
+    if (gameOver) { onComplete(0); return }
     if (qIdx < questions.length - 1) {
-      setQIdx(q => q + 1)
+      setQIdx(qi => qi + 1)
       setSelected(null)
     } else {
       onComplete(Math.round((correct / questions.length) * 100))
     }
   }
+
+  const timedOut = selected === -1
+  const isCorrectAnswer = selected !== null && selected !== -1 && selected === q.correct
 
   return (
     <div style={{
@@ -201,7 +240,7 @@ function QuizPractice({
       display: 'flex', flexDirection: 'column',
       padding: 20, gap: 14, overflowY: 'auto',
     }}>
-      {/* Progress */}
+      {/* Header row: progress + timer + lives */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8,
           color: 'var(--gold)' }}>
@@ -209,11 +248,39 @@ function QuizPractice({
         </div>
         <div style={{ flex: 1, height: 6, background: '#111', border: '1px solid #334' }}>
           <div style={{
-            width: `${((qIdx) / questions.length) * 100}%`,
+            width: `${(qIdx / questions.length) * 100}%`,
             height: '100%', background: '#44aaff', transition: 'width 0.3s',
           }} />
         </div>
+        {timeLeft !== null && (
+          <div style={{
+            fontFamily: "'Press Start 2P', monospace", fontSize: 10,
+            color: timeLeft <= 10 ? '#cc4444' : '#44cc44',
+            minWidth: 28, textAlign: 'right',
+            animation: timeLeft <= 5 ? 'cursor-blink 0.5s infinite' : 'none',
+          }}>
+            {timeLeft}s
+          </div>
+        )}
+        {livesLeft !== null && (
+          <div style={{ display: 'flex', gap: 3 }}>
+            {Array.from({ length: maxLives ?? 2 }).map((_, i) => (
+              <span key={i} style={{ fontSize: 14, opacity: i < livesLeft ? 1 : 0.25 }}>❤</span>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Game over banner */}
+      {gameOver && (
+        <div style={{
+          background: '#3a0a0a', border: '2px solid #cc4444',
+          padding: '10px 14px', textAlign: 'center',
+          fontFamily: "'Press Start 2P', monospace", fontSize: 10, color: '#cc4444',
+        }}>
+          FAILED — ライフが尽きた
+        </div>
+      )}
 
       {/* Question */}
       <div className="dialog-box" style={{ fontSize: 14 }}>
@@ -226,11 +293,11 @@ function QuizPractice({
           let cls = 'quiz-option'
           if (selected !== null) {
             if (i === q.correct) cls += ' correct'
-            else if (i === selected) cls += ' wrong'
+            else if (i === selected && !timedOut) cls += ' wrong'
           }
           return (
             <button key={i} className={cls} onClick={() => handleAnswer(i)}
-              disabled={selected !== null}>
+              disabled={selected !== null || gameOver}>
               {String.fromCharCode(65 + i)}. {opt}
             </button>
           )
@@ -241,21 +308,21 @@ function QuizPractice({
       {selected !== null && (
         <div style={{ animation: 'slideUp 0.3s ease' }}>
           <div style={{
-            background: selected === q.correct ? '#0a3a0a' : '#3a0a0a',
-            border: `2px solid ${selected === q.correct ? '#44cc44' : '#cc4444'}`,
+            background: isCorrectAnswer ? '#0a3a0a' : '#3a0a0a',
+            border: `2px solid ${isCorrectAnswer ? '#44cc44' : '#cc4444'}`,
             padding: '10px 14px',
             fontFamily: "'DotGothic16', sans-serif", fontSize: 13,
             color: 'var(--cream)', lineHeight: 1.7,
           }}>
             <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8,
-              color: selected === q.correct ? '#44cc44' : '#cc4444', marginBottom: 6 }}>
-              {selected === q.correct ? '✓ CORRECT!' : '✗ WRONG'}
+              color: isCorrectAnswer ? '#44cc44' : '#cc4444', marginBottom: 6 }}>
+              {timedOut ? '⏱ TIME UP!' : isCorrectAnswer ? '✓ CORRECT!' : '✗ WRONG'}
             </div>
             {q.explanation}
           </div>
           <button className="btn-pixel gold" style={{ marginTop: 12, width: '100%' }}
             onClick={next}>
-            {qIdx < questions.length - 1 ? '次の問題 ▶' : '結果へ ▶'}
+            {gameOver ? '結果へ ▶' : qIdx < questions.length - 1 ? '次の問題 ▶' : '結果へ ▶'}
           </button>
         </div>
       )}
@@ -481,13 +548,14 @@ function ServicePractice({
 
 // ─── Result Phase ──────────────────────────────────────────────────────────────
 function ResultPhase({
-  score, xpEarned, goldEarned, unlocks, onBack,
+  score, xpEarned, goldEarned, unlocks, onBack, isWhiskyMaster,
 }: {
   score: number
   xpEarned: number
   goldEarned: number
   unlocks: string[]
   onBack: () => void
+  isWhiskyMaster?: boolean
 }) {
   useEffect(() => {
     if (score >= 60) audioEngine.sfx('fanfare')
@@ -497,14 +565,58 @@ function ResultPhase({
   const grade = score >= 90 ? 'S' : score >= 70 ? 'A' : score >= 50 ? 'B' : 'C'
   const gradeColor = grade === 'S' ? '#f5c842' : grade === 'A' ? '#44cc44'
     : grade === 'B' ? '#44aaff' : '#cc8844'
+  const masterClear = isWhiskyMaster && score >= 60
 
   return (
     <div style={{
       position: 'absolute', inset: 0,
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      padding: 24, gap: 20,
+      padding: 24, gap: 20, overflowY: 'auto',
     }}>
+      {/* Whisky Master Certificate */}
+      {masterClear && (
+        <div style={{
+          background: 'linear-gradient(135deg, #2a1800 0%, #1a0f00 50%, #2a1800 100%)',
+          border: '3px solid #d4a017',
+          borderRadius: 4,
+          padding: '16px 24px',
+          textAlign: 'center',
+          boxShadow: '0 0 30px rgba(212,160,23,0.4)',
+          maxWidth: 320, width: '100%',
+          animation: 'fadeIn 0.5s ease',
+        }}>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7,
+            color: '#d4a017', letterSpacing: 2, marginBottom: 8 }}>
+            ✦ WHISKY CHRONICLES ✦
+          </div>
+          <div style={{
+            borderTop: '1px solid #d4a01744', borderBottom: '1px solid #d4a01744',
+            padding: '12px 0', margin: '8px 0',
+          }}>
+            <div style={{ fontFamily: "'DotGothic16', sans-serif", fontSize: 11,
+              color: '#e8c87a', marginBottom: 6 }}>これを証明する</div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9,
+              color: '#fff8e0', letterSpacing: 1 }}>WHISKY MASTER</div>
+            <div style={{ fontFamily: "'DotGothic16', sans-serif", fontSize: 18,
+              color: '#f5c842', margin: '8px 0', fontWeight: 'bold' }}>
+              ウイスキーマスター
+            </div>
+          </div>
+          <div style={{
+            display: 'flex', justifyContent: 'center', gap: 12, margin: '8px 0',
+          }}>
+            {['🌿','🥃','🏴󠁧󠁢󠁳󠁣󠁴󠁿','🥃','🌿'].map((e, i) => (
+              <span key={i} style={{ fontSize: 14 }}>{e}</span>
+            ))}
+          </div>
+          <div style={{ fontFamily: "'DotGothic16', sans-serif", fontSize: 11,
+            color: '#8a6a20', marginTop: 6 }}>
+            ウイスキーの深淵を知る者に授与される
+          </div>
+        </div>
+      )}
+
       <div style={{
         fontFamily: "'Press Start 2P', monospace",
         fontSize: 'clamp(40px, 10vw, 64px)',
@@ -613,7 +725,7 @@ export function StageScreen() {
 
   // find chapter for background
   const chapterVariants: Record<number, 'night' | 'evening' | 'dawn'> = {
-    1: 'night', 2: 'night', 3: 'evening', 4: 'evening', 5: 'dawn', 6: 'night',
+    1: 'night', 2: 'night', 3: 'evening', 4: 'evening', 5: 'dawn', 6: 'night', 7: 'night',
   }
   const bgVariant = chapterVariants[stage.chapterId] ?? 'night'
 
@@ -689,6 +801,9 @@ export function StageScreen() {
               <QuizPractice
                 category={stage.practiceRef === 'final_trial' ? 'mixed' : stage.practiceRef}
                 quizIds={stage.quizIds}
+                quizCount={stage.quizCount}
+                timeLimit={stage.timeLimit}
+                maxLives={stage.maxLives}
                 onComplete={handlePracticeComplete}
               />
             )
@@ -714,6 +829,7 @@ export function StageScreen() {
             goldEarned={goldEarned}
             unlocks={stage.unlocks}
             onBack={() => navigate('stageMap')}
+            isWhiskyMaster={stage.id === 'EX-S'}
           />
         )}
       </div>

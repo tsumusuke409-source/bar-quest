@@ -65,6 +65,9 @@ export interface Stage {
   practiceType: PracticeType
   practiceRef: string   // quiz category OR cocktailId OR scenarioId
   quizIds?: string[]    // specific quiz IDs; when set, overrides category filter
+  quizCount?: number    // total questions drawn (default 5)
+  timeLimit?: number    // seconds per question
+  maxLives?: number     // max mistakes allowed before fail
   xpReward: number
   goldReward: number
   unlocks: string[]     // cocktail / character IDs
@@ -79,6 +82,8 @@ export interface Chapter {
   subtitle: string
   stages: Stage[]
   backgroundVariant: 'night' | 'evening' | 'dawn'
+  isExtra?: boolean     // marks EX chapter for special UI
+  label?: string        // tab label override (e.g. 'EX')
 }
 
 // ─── Lecture Dialogue ───────────────────────────────────────────────────────
@@ -107,6 +112,10 @@ export type QuizCategory =
   | 'cocktails'
   | 'service'
   | 'mixed'
+  | 'whisky_origins'
+  | 'whisky_production'
+  | 'whisky_tasting'
+  | 'whisky_cocktails'
 
 export interface QuizQuestion {
   id: string

@@ -5,11 +5,14 @@ import { BarBackground } from '../pixel/BarBackground'
 import { CHAPTERS } from '../../data/stages'
 import type { Stage } from '../../types'
 
+const EX_UNLOCK_STAGE = 'F-1' // EX chapter requires final stage complete
+
 export function StageMapScreen() {
   useTrack('game')
   const navigate = useGameStore(s => s.navigate)
   const completedStages = useGameStore(s => s.completedStages)
   const isStageUnlocked = useGameStore(s => s.isStageUnlocked)
+  const exUnlocked = completedStages.includes(EX_UNLOCK_STAGE)
 
   // find which chapter to start on (first chapter with incomplete stages)
   const defaultChapter = () => {
@@ -54,19 +57,32 @@ export function StageMapScreen() {
           {CHAPTERS.map(ch => {
             const done = ch.stages.every(s => completedStages.includes(s.id))
             const active = ch.id === activeChapter
+            const isEX = ch.isExtra
+            const locked = isEX && !exUnlocked
+            const tabLabel = ch.label ?? `CH${ch.id}`
             return (
               <button
                 key={ch.id}
-                onClick={() => setActiveChapter(ch.id)}
+                onClick={() => !locked && setActiveChapter(ch.id)}
                 style={{
                   fontFamily: "'Press Start 2P', monospace", fontSize: 7,
-                  padding: '6px 10px', border: 'none', cursor: 'pointer',
-                  background: active ? 'var(--gold)' : done ? '#1a4a1a' : '#111a3a',
-                  color: active ? '#000' : done ? '#44cc44' : 'var(--cream)',
+                  padding: '6px 10px',
+                  border: isEX ? `1px solid ${locked ? '#222' : '#6a4a00'}` : 'none',
+                  cursor: locked ? 'not-allowed' : 'pointer',
+                  background: locked ? '#0a0a14'
+                    : active ? (isEX ? '#c07800' : 'var(--gold)')
+                    : done ? (isEX ? '#2a1800' : '#1a4a1a')
+                    : (isEX ? '#1a0f00' : '#111a3a'),
+                  color: locked ? '#33334a'
+                    : active ? '#000'
+                    : done ? (isEX ? '#d4a017' : '#44cc44')
+                    : (isEX ? '#c07800' : 'var(--cream)'),
                   transition: 'background 0.15s',
+                  opacity: locked ? 0.6 : 1,
                 }}
+                title={locked ? 'メインストーリーをクリアするとアンロックされます' : undefined}
               >
-                CH{ch.id}
+                {locked ? '🔒' : tabLabel}
               </button>
             )
           })}
@@ -79,11 +95,11 @@ export function StageMapScreen() {
         textAlign: 'center', padding: '8px 0',
       }}>
         <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9,
-          color: 'var(--gold)' }}>
-          CHAPTER {chapter.id}: {chapter.title}
+          color: chapter.isExtra ? '#d4a017' : 'var(--gold)' }}>
+          {chapter.isExtra ? `✦ ${chapter.title} ✦` : `CHAPTER ${chapter.id}: ${chapter.title}`}
         </div>
         <div style={{ fontFamily: "'DotGothic16', sans-serif", fontSize: 12,
-          color: 'var(--cream)', marginTop: 4 }}>
+          color: chapter.isExtra ? '#c07800' : 'var(--cream)', marginTop: 4 }}>
           {chapter.subtitle}
         </div>
       </div>
@@ -110,9 +126,35 @@ export function StageMapScreen() {
         {/* Subtle chapter background glow */}
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(245,200,66,0.04) 0%, transparent 70%)',
+          background: chapter.isExtra
+            ? 'radial-gradient(ellipse at 50% 50%, rgba(180,100,0,0.08) 0%, rgba(20,10,0,0.3) 100%)'
+            : 'radial-gradient(ellipse at 50% 50%, rgba(245,200,66,0.04) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
+        {/* EX chapter: amber mist overlay */}
+        {chapter.isExtra && (
+          <>
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(180deg, rgba(40,20,0,0.6) 0%, transparent 40%, rgba(40,20,0,0.4) 100%)',
+              pointerEvents: 'none',
+            }} />
+            {[...Array(6)].map((_, i) => (
+              <div key={`mist-${i}`} style={{
+                position: 'absolute',
+                left: `${(i * 18 + 5) % 90}%`,
+                top: `${(i * 23 + 10) % 70}%`,
+                width: `${80 + i * 30}px`,
+                height: `${20 + i * 8}px`,
+                background: 'rgba(180,130,40,0.06)',
+                borderRadius: '50%',
+                filter: 'blur(12px)',
+                animation: `twinkle ${4 + i * 0.8}s ${i * 0.5}s ease-in-out infinite`,
+                pointerEvents: 'none',
+              }} />
+            ))}
+          </>
+        )}
         <svg
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
