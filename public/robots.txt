@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://minarai-barquest.com/sitemap.xml

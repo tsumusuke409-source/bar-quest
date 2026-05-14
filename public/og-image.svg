@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0a0e23"/>
+
+  <!-- Stars -->
+  <rect x="80" y="40" width="4" height="4" fill="#f5c842" opacity="0.8"/>
+  <rect x="200" y="80" width="2" height="2" fill="#aaccff" opacity="0.6"/>
+  <rect x="350" y="30" width="3" height="3" fill="#ffe0a0" opacity="0.7"/>
+  <rect x="500" y="60" width="2" height="2" fill="#f5c842" opacity="0.5"/>
+  <rect x="700" y="25" width="4" height="4" fill="#aaccff" opacity="0.8"/>
+  <rect x="850" y="70" width="2" height="2" fill="#ffe0a0" opacity="0.6"/>
+  <rect x="950" y="40" width="3" height="3" fill="#f5c842" opacity="0.7"/>
+  <rect x="1100" y="55" width="2" height="2" fill="#aaccff" opacity="0.5"/>
+  <rect x="150" y="150" width="2" height="2" fill="#ffe0a0" opacity="0.4"/>
+  <rect x="1050" y="120" width="3" height="3" fill="#f5c842" opacity="0.5"/>
+  <rect x="420" y="110" width="2" height="2" fill="#aaccff" opacity="0.6"/>
+  <rect x="780" y="100" width="2" height="2" fill="#ffe0a0" opacity="0.5"/>
+
+  <!-- Moon -->
+  <circle cx="1100" cy="100" r="45" fill="#fffbe8" opacity="0.9"/>
+  <circle cx="1118" cy="85" r="40" fill="#0a0e23" opacity="0.8"/>
+
+  <!-- Bar counter -->
+  <rect x="0" y="480" width="1200" height="12" fill="#7a4a20"/>
+  <rect x="0" y="492" width="1200" height="138" fill="#1a0c00"/>
+
+  <!-- Bottles on shelf -->
+  <rect x="0" y="400" width="1200" height="16" fill="#5a3010"/>
+  <!-- Bottle group -->
+  <g transform="translate(60,360)">
+    <rect x="4" y="-36" width="8" height="6" fill="#333"/>
+    <rect x="4" y="-30" width="8" height="10" fill="#d4a017"/>
+    <rect x="0" y="-20" width="16" height="28" fill="#d4a017"/>
+    <rect x="2" y="-12" width="12" height="10" fill="#f0c840" opacity="0.8"/>
+    <rect x="2" y="-18" width="3" height="14" fill="white" opacity="0.25"/>
+  </g>
+  <g transform="translate(100,360)">
+    <rect x="4" y="-36" width="8" height="6" fill="#333"/>
+    <rect x="4" y="-30" width="8" height="10" fill="#228844"/>
+    <rect x="0" y="-20" width="16" height="28" fill="#228844"/>
+    <rect x="2" y="-12" width="12" height="10" fill="#44cc66" opacity="0.8"/>
+    <rect x="2" y="-18" width="3" height="14" fill="white" opacity="0.25"/>
+  </g>
+  <g transform="translate(140,360)">
+    <rect x="4" y="-36" width="8" height="6" fill="#333"/>
+    <rect x="4" y="-30" width="8" height="10" fill="#881a1a"/>
+    <rect x="0" y="-20" width="16" height="28" fill="#881a1a"/>
+    <rect x="2" y="-12" width="12" height="10" fill="#cc3333" opacity="0.8"/>
+    <rect x="2" y="-18" width="3" height="14" fill="white" opacity="0.25"/>
+  </g>
+  <g transform="translate(180,360)">
+    <rect x="4" y="-36" width="8" height="6" fill="#333"/>
+    <rect x="4" y="-30" width="8" height="10" fill="#5522aa"/>
+    <rect x="0" y="-20" width="16" height="28" fill="#5522aa"/>
+    <rect x="2" y="-12" width="12" height="10" fill="#8844cc" opacity="0.8"/>
+    <rect x="2" y="-18" width="3" height="14" fill="white" opacity="0.25"/>
+  </g>
+  <g transform="translate(220,360)">
+    <rect x="4" y="-36" width="8" height="6" fill="#333"/>
+    <rect x="4" y="-30" width="8" height="10" fill="#1a4488"/>
+    <rect x="0" y="-20" width="16" height="28" fill="#1a4488"/>
+    <rect x="2" y="-12" width="12" height="10" fill="#3366bb" opacity="0.8"/>
+    <rect x="2" y="-18" width="3" height="14" fill="white" opacity="0.25"/>
+  </g>
+
+  <!-- Cocktail glass on counter -->
+  <polygon points="560,430 640,430 625,490 575,490" fill="#88ccff" opacity="0.5"/>
+  <rect x="594" y="490" width="12" height="20" fill="#88ccff" opacity="0.4"/>
+  <rect x="578" y="510" width="44" height="4" fill="#88ccff" opacity="0.4"/>
+  <!-- Liquid in glass -->
+  <polygon points="574,464 626,464 625,490 575,490" fill="#e8805a" opacity="0.7"/>
+  <!-- Cherry garnish -->
+  <circle cx="628" cy="432" r="8" fill="#cc2244"/>
+  <rect x="627" y="420" width="2" height="14" fill="#228844"/>
+
+  <!-- Candle -->
+  <rect x="680" y="460" width="14" height="28" fill="#f5e0a0"/>
+  <rect x="685" y="454" width="4" height="8" fill="#e8a020"/>
+  <ellipse cx="687" cy="452" rx="8" ry="10" fill="#ffdd44" opacity="0.35"/>
+  <rect x="666" y="486" width="44" height="6" fill="#4a2a0a"/>
+
+  <!-- Title text area -->
+  <rect x="100" y="160" width="1000" height="220" fill="#0d1230" opacity="0.85"/>
+  <rect x="102" y="162" width="996" height="216" fill="none" stroke="#d4a017" stroke-width="4"/>
+
+  <!-- Pixel-art "BAR QUEST" text simulation (block letters) -->
+  <!-- B -->
+  <rect x="150" y="195" width="10" height="70" fill="#d4a017"/>
+  <rect x="160" y="195" width="30" height="10" fill="#d4a017"/>
+  <rect x="160" y="228" width="30" height="8" fill="#d4a017"/>
+  <rect x="160" y="255" width="30" height="10" fill="#d4a017"/>
+  <rect x="190" y="205" width="10" height="23" fill="#d4a017"/>
+  <rect x="190" y="236" width="10" height="19" fill="#d4a017"/>
+  <!-- A -->
+  <rect x="215" y="195" width="10" height="70" fill="#d4a017"/>
+  <rect x="215" y="195" width="40" height="10" fill="#d4a017"/>
+  <rect x="215" y="228" width="40" height="8" fill="#d4a017"/>
+  <rect x="245" y="195" width="10" height="70" fill="#d4a017"/>
+  <!-- R -->
+  <rect x="270" y="195" width="10" height="70" fill="#d4a017"/>
+  <rect x="280" y="195" width="30" height="10" fill="#d4a017"/>
+  <rect x="280" y="228" width="30" height="8" fill="#d4a017"/>
+  <rect x="310" y="205" width="10" height="23" fill="#d4a017"/>
+  <rect x="295" y="236" width="10" height="10" fill="#d4a017"/>
+  <rect x="305" y="246" width="10" height="10" fill="#d4a017"/>
+  <rect x="315" y="255" width="10" height="10" fill="#d4a017"/>
+
+  <!-- Separator -->
+  <rect x="340" y="215" width="6" height="6" fill="#d4a017"/>
+  <rect x="340" y="235" width="6" height="6" fill="#d4a017"/>
+  <rect x="340" y="255" width="6" height="6" fill="#d4a017"/>
+
+  <!-- Q -->
+  <rect x="360" y="195" width="10" height="70" fill="#d4a017"/>
+  <rect x="360" y="195" width="40" height="10" fill="#d4a017"/>
+  <rect x="360" y="255" width="40" height="10" fill="#d4a017"/>
+  <rect x="390" y="195" width="10" height="70" fill="#d4a017"/>
+  <rect x="380" y="240" width="10" height="10" fill="#d4a017"/>
+  <rect x="390" y="250" width="10" height="15" fill="#d4a017"/>
+  <!-- U -->
+  <rect x="415" y="195" width="10" height="60" fill="#d4a017"/>
+  <rect x="415" y="255" width="40" height="10" fill="#d4a017"/>
+  <rect x="445" y="195" width="10" height="60" fill="#d4a017"/>
+  <!-- E -->
+  <rect x="470" y="195" width="10" height="70" fill="#d4a017"/>
+  <rect x="480" y="195" width="35" height="10" fill="#d4a017"/>
+  <rect x="480" y="228" width="30" height="8" fill="#d4a017"/>
+  <rect x="480" y="255" width="35" height="10" fill="#d4a017"/>
+  <!-- S -->
+  <rect x="530" y="195" width="40" height="10" fill="#d4a017"/>
+  <rect x="530" y="195" width="10" height="38" fill="#d4a017"/>
+  <rect x="530" y="228" width="40" height="8" fill="#d4a017"/>
+  <rect x="560" y="236" width="10" height="29" fill="#d4a017"/>
+  <rect x="530" y="255" width="40" height="10" fill="#d4a017"/>
+  <!-- T -->
+  <rect x="585" y="195" width="40" height="10" fill="#d4a017"/>
+  <rect x="600" y="205" width="10" height="60" fill="#d4a017"/>
+
+  <!-- Subtitle -->
+  <text x="600" y="320" font-family="monospace" font-size="22" fill="#c8d0f0" text-anchor="middle" letter-spacing="3">Spirits of the Night</text>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="440" font-family="monospace" font-size="18" fill="#8090b0" text-anchor="middle">バーテンダーを目指すRPG学習ゲーム　無料プレイ</text>
+
+  <!-- URL -->
+  <text x="600" y="570" font-family="monospace" font-size="20" fill="#d4a017" text-anchor="middle" opacity="0.8">minarai-barquest.com</text>
+
+  <!-- Decorative stars bottom -->
+  <rect x="560" y="558" width="6" height="6" fill="#d4a017" opacity="0.6"/>
+  <rect x="630" y="558" width="6" height="6" fill="#d4a017" opacity="0.6"/>
+
+  <!-- Warm glow overlay -->
+  <radialGradient id="glow" cx="50%" cy="75%" r="50%">
+    <stop offset="0%" stop-color="#cc5500" stop-opacity="0.12"/>
+    <stop offset="100%" stop-color="#cc5500" stop-opacity="0"/>
+  </radialGradient>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#glow)"/>
+</svg>
