@@ -93,6 +93,54 @@ vercel --prod
 # ビルドコマンド: npm run build / 出力: dist
 ```
 
+## SEO / Google Search Console
+
+### 配信ファイル
+
+| ファイル | URL | 説明 |
+|------|-----|------|
+| `public/robots.txt` | `/robots.txt` | 全クローラー許可・サイトマップ指定 |
+| `public/sitemap.xml` | `/sitemap.xml` | トップページのみ（SPA のため URL は1つ） |
+| `public/og-image.png` | `/og-image.png` | OGP画像 1200×630px |
+
+> **SPA の注意点**：このゲームはすべての画面が `https://minarai-barquest.com/` 単一 URL で動作する SPA です。  
+> ステージマップ・クイズ・図鑑などは Zustand の状態遷移で切り替わるため、サイトマップに複数 URL は不要です。
+
+### ローカルでの確認
+
+```bash
+npm run build && npm run preview
+# → http://localhost:4173/sitemap.xml
+# → http://localhost:4173/robots.txt
+# → http://localhost:4173/og-image.png
+```
+
+### OGP の確認
+
+デプロイ後に以下のサービスで確認できます：
+
+- **opengraph.xyz**: https://www.opengraph.xyz/  
+  URL 欄に `https://minarai-barquest.com` を入力
+- **Twitter Card Validator**: https://cards-dev.twitter.com/validator
+
+### Google Search Console でのサイトマップ送信
+
+1. [Google Search Console](https://search.google.com/search-console) を開く
+2. 左メニュー「インデックス作成」→「サイトマップ」を選択
+3. 以下の URL を入力して「送信」：
+   ```
+   https://minarai-barquest.com/sitemap.xml
+   ```
+4. ステータスが「成功しました」になれば完了
+
+### sitemap.xml の更新方法
+
+コンテンツを大きく更新したときは `public/sitemap.xml` の `<lastmod>` を編集してください：
+
+```xml
+<lastmod>YYYY-MM-DD</lastmod>  ← 今日の日付に変更
+```
+
 ## 注意事項
 
 このゲームは教育目的で作成されています。  
